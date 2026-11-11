@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light" />
+  <meta name="format-detection" content="telephone=no" />
+  <title>帕金森诊疗中心 · 课堂互动</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app" id="app">
+    <header class="site-header">
+      <div class="brand-row">
+        <div class="brand" id="brandBlock">
+          <h1>帕金森诊疗中心 <span class="badge-teach">教学示意</span></h1>
+          <div class="sub">基因的表达（一轮复习）· 以帕金森 / TMEM175 为例</div>
+        </div>
+        <div class="brand-meta">
+          高三一轮 · 学生平板操作<br />
+          Hu et al., Cell, 2022
+        </div>
+      </div>
+      <nav class="nav-bar" aria-label="课堂六段导航">
+        <button type="button" class="nav-mark" id="navMark" title="">▲</button>
+        <div class="nav-items" id="navItems"></div>
+      </nav>
+    </header>
+
+    <main class="main" id="main">
+      <!-- 入项活动 -->
+      <section class="view" id="view-home" data-stage="home">
+        <p class="page-title">课堂互动站</p>
+        <p class="lead">你是诊疗中心研究小组成员。本站只做需要亲手操作的部分；题目、过渡语、资料卡读图、对比填表、开放探究书写和真题请在课件与任务卡上完成。</p>
+        <div class="panel">
+          <h3>使用说明（给学生）</h3>
+          <ul>
+            <li>按教师口令推进阶段。未解锁的导航会显示锁定，请不要提前翻到后面。</li>
+            <li>所有序列、模型和 3D 均为<strong>教学示意</strong>，只用第 38–42 位密码子的示意片段，不是全长基因。</li>
+            <li>TMEM175 是帕金森病的<strong>风险因子</strong>。不要写成「有替换就一定会得帕金森」或「改一个碱基就手抖」。</li>
+          </ul>
+        </div>
+        <div class="module-grid" id="homeModules"></div>
+      </section>
+
+      <!-- 启发思路：站上不做填表/读图 -->
+      <section class="view" id="view-inspire" data-stage="inspire">
+        <p class="page-title">启发思路 <span class="sep">｜</span> 请先看课件</p>
+        <div class="panel">
+          <p>本段的转录要点、复制—转录—翻译对照表、多聚核糖体思考和「基因 → 蛋白质」流程图都在课件与任务卡上。本站不重复出题。</p>
+          <p class="hint">破译结束后，教师会解锁「诊断归因」，请到平板上完成序列配对。</p>
+        </div>
+      </section>
+
+      <!-- 诊断配对 -->
+      <section class="view" id="view-diagnose" data-stage="diagnose">
+        <p class="page-title">任务二 · 基因诊断 <span class="sep">｜</span> 异常蛋白如何形成？</p>
+        <p class="lead">资料卡 2｜基因诊断报告（节选第 38–42 位密码子）<span class="badge-teach">教学示意</span>　先自己配对，再对照标准示意。读图题请看课件。</p>
+
+        <div class="panel">
+          <div class="btn-row" style="margin-top:0">
+            <button class="btn btn-primary" data-diag-tab="pair" type="button">① 配对翻译</button>
+            <button class="btn" data-diag-tab="edit" type="button">② 改一个碱基</button>
+            <button class="btn" data-diag-tab="compare" type="button" id="btnCompare">③ 对照标准示意</button>
+          </div>
+        </div>
+
+        <div id="diagPair">
+          <div class="seq-board" id="seqBoard"></div>
+          <div class="panel">
+            <h3>氨基酸托盘 <span style="font-weight:600;color:var(--muted);font-size:14px">先点密码子下方空格，再点氨基酸。可以改，可以清空重来。</span></h3>
+            <div class="aa-tray" id="aaTray"></div>
+            <div class="btn-row">
+              <button class="btn" type="button" id="diagClear">清空我的配对</button>
+              <button class="btn" type="button" id="toggleCodonTable">查阅密码子表（示意）</button>
+            </div>
+            <div id="codonTableWrap" hidden></div>
+          </div>
+        </div>
+
+        <div id="diagEdit" hidden>
+          <div class="panel sandbox">
+            <h3>改一个碱基，观察氨基酸是否变化</h3>
+            <p class="hint">从正常人第 38–42 位示意片段出发，点按某个碱基即可切换 A / U / G / C。想一想：为什么有的替换改了氨基酸，有的却不变？</p>
+            <div class="bases" id="sandboxBases"></div>
+            <p class="peptide-line" id="sandboxPeptide"></p>
+            <p class="hint" id="sandboxNote"></p>
+            <div class="btn-row">
+              <button class="btn" type="button" id="sandboxReset">恢复正常人序列</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="diagCompare" hidden>
+          <div class="panel compare-box" id="compareBox">
+            <p><strong>建议先自己配对、再看示意。</strong>标准示意与课件资料卡 2 一致，仅用于对照，不是让你提前抄答案去答题。</p>
+            <div id="compareContent"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 宏观到微观 -->
+      <section class="view" id="view-journey" data-stage="model">
+        <p class="page-title">从颤抖的手到溶酶体 <span class="sep">｜</span> 宏观 → 微观</p>
+        <p class="lead">表型和病理在神经元。点「下一步」让镜头沿着神经系统飞进去，最后进入图 8 立体对照。</p>
+        <div class="journey-frame" id="journeyFrame"></div>
+        <div class="btn-row">
+          <button class="btn" type="button" id="journeyPrev">上一步</button>
+          <div class="step-dots" id="journeyDots"></div>
+          <button class="btn btn-primary" type="button" id="journeyNext">下一步</button>
+        </div>
+      </section>
+
+      <!-- 图8 溶酶体 3D -->
+      <section class="view" id="view-lysosome" data-stage="model">
+        <p class="page-title">图 8　溶酶体酸碱稳态 <span class="sep">｜</span> 立体对照</p>
+        <p class="lead">先看正常溶酶体，再回答右侧的问题、做出假设；<strong>最后才由教师口令切换异常对照</strong>。读图题与思考题留在课件，这里不重复出题。</p>
+        <div class="lyso-layout">
+          <div>
+            <div class="lyso-stage" id="lysoStage">
+              <div class="lyso-hud">
+                <div class="hud-pill" id="hudPH">腔内 pH　约 4.6</div>
+                <div class="hud-pill" id="hudCyt">细胞质 pH　≈ 7.2</div>
+                <div class="hud-pill" id="hudMode">状态　正常（默认）</div>
+              </div>
+              <div class="lyso-tools">
+                <button class="btn" type="button" id="lysoReset">复位视角</button>
+                <button class="btn" type="button" id="lysoCut">切面开 / 关</button>
+                <button class="btn btn-gold" type="button" id="lysoAbnormal" hidden>切换异常对照</button>
+              </div>
+            </div>
+            <p class="hint" style="margin-top:8px">单指拖动旋转，双指或滚轮缩放。膜上两种蛋白请看清楚：<strong>V-ATPase 是氢泵</strong>（水解 ATP，把 H⁺ 泵入）；<strong>TMEM175 是通道</strong>（把多余 H⁺ 漏出，不是第二种泵）。</p>
+          </div>
+          <div>
+            <div class="panel">
+              <h3>图例</h3>
+              <div class="legend">
+                <div class="legend-item"><span class="swatch" style="background:#6B7CDB"></span><div><strong>V-ATPase 氢泵</strong><br />位于膜上，水解 ATP，把 H⁺ 从细胞质泵入腔内。</div></div>
+                <div class="legend-item"><span class="swatch" style="background:#3FA37A"></span><div><strong>TMEM175 通道</strong><br />把多余 H⁺ 漏出，协助维持腔内 pH；不是泵。</div></div>
+                <div class="legend-item"><span class="swatch" style="background:#E45B8A"></span><div><strong>H⁺</strong><br />腔内酸性环境的来源。</div></div>
+                <div class="legend-item"><span class="swatch" style="background:#E8A838"></span><div><strong>水解酶（消化车间）</strong><br />降解损伤细胞器 / 「垃圾」，需要适宜 pH。</div></div>
+              </div>
+              <p class="hint" style="margin-bottom:0">正常腔内 pH 约 4.6（说明：文献与教材常写范围 4.5–5.0，本课与课件统一写「约 4.6」）。</p>
+            </div>
+            <div class="panel">
+              <h3>教师要问（先看、再问）</h3>
+              <ol class="ask-list">
+                <li>H⁺ 怎么进、怎么出？</li>
+                <li>为什么 pH 能稳定在约 4.6？</li>
+                <li>如果 TMEM175 漏不出去，pH 和水解酶会怎么样？</li>
+              </ol>
+            </div>
+            <div class="panel">
+              <h3>先猜后看（可选）</h3>
+              <p class="hint">如果 TMEM175 减弱、H⁺ 出不去，你猜腔内 pH 和水解酶活性会怎样？先选，再说给同伴听。</p>
+              <p style="margin:0 0 6px;font-weight:800;font-size:14px">腔内 pH</p>
+              <div class="guess-grid" id="guessPH">
+                <button class="guess-opt" type="button" data-val="4.6">仍约 4.6</button>
+                <button class="guess-opt" type="button" data-val="low">&lt; 4.6（更酸）</button>
+                <button class="guess-opt" type="button" data-val="7.2">接近 7.2</button>
+                <button class="guess-opt" type="button" data-val="high">明显高于 4.6</button>
+              </div>
+              <p style="margin:10px 0 6px;font-weight:800;font-size:14px">水解酶活性</p>
+              <div class="guess-grid" id="guessEnz">
+                <button class="guess-opt" type="button" data-val="up">升高</button>
+                <button class="guess-opt" type="button" data-val="same">基本不变</button>
+                <button class="guess-opt" type="button" data-val="down">下降</button>
+              </div>
+            </div>
+            <div class="panel">
+              <h3>拖因果卡（可以拖错，可以重来）</h3>
+              <p class="hint">先排出你的假设链。不要急着写「所以导致帕金森」。搭完后等教师口令，再看异常对照。</p>
+              <div class="chain-slots" id="causeSlots"></div>
+              <div class="palette" id="causePalette" style="margin-top:10px"></div>
+              <div class="btn-row">
+                <button class="btn" type="button" id="causeReset">拆开重来</button>
+              </div>
+              <p class="hint" id="causeHint"></p>
+            </div>
+            <div class="panel" id="abnormalNote" hidden>
+              <h3>异常对照（教师已解锁）</h3>
+              <p>TMEM175 减弱后，H⁺ 出不去，氢泵仍在泵入，腔内 pH &lt; 4.6，水解酶活性下降，α-突触核蛋白更难降解。</p>
+              <p class="hint" style="margin-bottom:0">请注意：TMEM175 是风险因子。不要写成「有替换就一定会得帕金森」。清理是否受阻、风险是否升高，要放到完整因果链里看。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 模型建构 -->
+      <section class="view" id="view-model" data-stage="model">
+        <p class="page-title">模型建构 <span class="sep">｜</span> 拖动方框，完成 TMEM175 致病机理模型</p>
+        <p class="lead">卡片与课件同一套。绿色为正常通路，黄—红色为致病通路，箭头表示过程或因果关系。可以拖错，可以拆开重来。对照参考请等教师口令。</p>
+        <div class="panel model-workspace">
+          <div class="path-row normal">
+            <div class="path-label">正常通路</div>
+            <div class="slots" id="slotsNormal"></div>
+          </div>
+          <div class="path-row patho">
+            <div class="path-label">致病通路</div>
+            <div class="slots" id="slotsPatho"></div>
+          </div>
+          <div>
+            <p style="margin:0 0 8px;font-weight:800">待用卡片</p>
+            <div class="palette" id="modelPalette"></div>
+          </div>
+          <div class="btn-row">
+            <button class="btn" type="button" id="modelReset">拆开重来</button>
+            <button class="btn" type="button" id="modelShuffle">打乱卡片</button>
+            <button class="btn btn-gold" type="button" id="modelRefBtn">对照参考模型</button>
+          </div>
+        </div>
+        <div class="panel" id="modelRef" hidden>
+          <h3>参考：TMEM175 相关帕金森综合征的致病机理模型</h3>
+          <p class="hint">对照你自己摆的模型：环节是否完整？因果方向是否正确？——能用一个模型同时解释「正常」与「患病」两种状态，才是好模型。</p>
+          <div id="modelRefGraph"></div>
+        </div>
+        <div class="panel">
+          <p>模型搭完后，教师可用口令对照「端得稳 / 很难拿稳」的融媒体影像。意象是<strong>清理是否受阻、风险是否升高</strong>，不是「改一个碱基就手抖」。视频位置在「成果展示」，第一版先留空位，由教师解锁后显示。</p>
+        </div>
+      </section>
+
+      <!-- 开放设计：不写第二套题 -->
+      <section class="view" id="view-design" data-stage="design">
+        <p class="page-title">开放设计 <span class="sep">｜</span> 请在课件与任务卡上完成</p>
+        <div class="panel">
+          <p>开放探究书写、验证方案和三层面治疗思路都在课件与任务卡上。本站不做第二套题，也不再放书写框。</p>
+          <p class="hint">科学探究的关键不在于「对」，而是让解释经得起推敲。证据可以支持模型，也可以反驳模型。</p>
+        </div>
+      </section>
+
+      <!-- 成果展示 -->
+      <section class="view" id="view-show" data-stage="show">
+        <p class="page-title">成果展示 <span class="sep">｜</span> 融媒体对照留空</p>
+        <p class="lead">「端得稳 / 很难拿稳」用于对照清理是否受阻、风险是否升高。第一版只留插件位置，不自制片源。请教师解锁后使用。</p>
+        <div class="media-slots" id="mediaSlots">
+          <div class="media-ph is-locked" data-media="steady">
+            <h3>端得稳</h3>
+            <p>视频插件留空。解锁后可在此接入对照影像。</p>
+          </div>
+          <div class="media-ph is-locked" data-media="tremor">
+            <h3>很难拿稳</h3>
+            <p>视频插件留空。解锁后可在此接入对照影像。</p>
+          </div>
+        </div>
+        <p class="hint">小组答辩的四项产物（流程图、诊断结论、致病机理模型、治疗建议）请按课件「30 秒答辩」在课堂展示，不必抄到本站。</p>
+      </section>
+    </main>
+  </div>
+
+  <button type="button" class="tutor-fab" id="tutorFab" title="课堂提问">问一问</button>
+  <aside class="tutor-panel" id="tutorPanel" aria-label="课堂提问框">
+    <div class="tutor-head">
+      <span>课堂提问 · 只谈本课</span>
+      <button type="button" id="tutorClose">关闭</button>
+    </div>
+    <div class="tutor-log" id="tutorLog"></div>
+    <form class="tutor-form" id="tutorForm">
+      <textarea id="tutorInput" placeholder="卡住了？先写出你想到哪一步。不提供个人就医建议。" maxlength="500" required></textarea>
+      <button class="btn btn-primary" type="submit">发送</button>
+    </form>
+  </aside>
+
+  <button type="button" class="hot-corner" id="hotCorner" aria-label=""></button>
+
+  <div class="teacher-modal" id="teacherModal">
+    <div class="teacher-card" role="dialog" aria-labelledby="teacherTitle">
+      <h2 id="teacherTitle">教师面板</h2>
+      <p class="tiny">默认口令见 README。本机记忆，不需服务器，也不会同步全班翻页。</p>
+      <form id="teacherGate" style="display:flex;gap:8px;margin:10px 0">
+        <input class="btn" style="flex:1;text-align:left;font-weight:600" type="password" id="teacherCode" placeholder="口令" autocomplete="off" />
+        <button class="btn btn-primary" type="submit">进入</button>
+      </form>
+      <div id="teacherBody" hidden>
+        <p style="margin:0 0 6px;font-weight:800">当前讲到</p>
+        <div class="gate-list" id="stagePick"></div>
+        <p style="margin:12px 0 6px;font-weight:800">专项解锁</p>
+        <div class="btn-row">
+          <button class="btn" type="button" data-flag="lysosomeAbnormal">溶酶体异常对照</button>
+          <button class="btn" type="button" data-flag="modelRef">参考模型</button>
+          <button class="btn" type="button" data-flag="media">融媒体空位</button>
+          <button class="btn" type="button" data-flag="compare">诊断标准示意</button>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-gold" type="button" id="unlockAll">全部解锁（课后）</button>
+          <button class="btn" type="button" id="lockDefault">恢复课上默认</button>
+          <button class="btn" type="button" id="teacherClose">关闭</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/vendor/three.min.js"></script>
+  <script src="js/config.example.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/diagnose.js"></script>
+  <script src="js/journey.js"></script>
+  <script src="js/lysosome.js"></script>
+  <script src="js/model.js"></script>
+  <script src="js/tutor.js"></script>
+  <script>
+    /* 可选的本地 config.js：存在则覆盖示例配置。缺失时忽略，保证无 key 也能上课。
+       boot 必须在各模块的 DOMContentLoaded 监听注册之后、并等 DOMContentLoaded 再跑，
+       以免刷新落在 #/lysosome 时三维还没开始监听路由。 */
+    window.TMEM175.loadOptionalConfig('js/config.js');
+    function startApp() { window.TMEM175.boot(); }
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", startApp);
+    else startApp();
+  </script>
+</body>
+</html>
