@@ -1,7 +1,13 @@
 /* 帕金森诊疗中心 · 应用壳：导航、教师解锁、拖拽、轻提示 */
 (function (global) {
   const STORAGE = "tmem175-lab-v2";
-  const PASS = "tmem175";
+  /* 只存口令的 SHA-256，明文不入库。大小写不限。 */
+  const PASS_SHA256 = "cb6e996cf09f8901bedc1598709332c0689b5cdd9637767ee43c6af2e737f9cd";
+
+  async function hashTeacherCode(text) {
+    const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+    return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, "0")).join("");
+  }
 
   const STAGES = [
     { id: "home", nav: "入项活动", routes: ["", "home"] },
@@ -273,10 +279,16 @@
     longPress(document.getElementById("hotCorner"));
     longPress(document.getElementById("brandBlock"));
 
-    document.getElementById("teacherGate").addEventListener("submit", (e) => {
+    document.getElementById("teacherGate").addEventListener("submit", async (e) => {
       e.preventDefault();
       const code = (document.getElementById("teacherCode").value || "").trim().toLowerCase();
-      if (code === PASS) {
+      let ok = false;
+      try {
+        ok = (await hashTeacherCode(code)) === PASS_SHA256;
+      } catch (err) {
+        ok = false;
+      }
+      if (ok) {
         App._teacherAuthed = true;
         document.getElementById("teacherGate").style.display = "none";
         document.getElementById("teacherBody").hidden = false;
