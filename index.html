@@ -22,7 +22,7 @@
           Hu et al., Cell, 2022
         </div>
       </div>
-      <nav class="nav-bar" aria-label="课堂六段导航">
+      <nav class="nav-bar" aria-label="课堂导航">
         <button type="button" class="nav-mark" id="navMark" title="">▲</button>
         <div class="nav-items" id="navItems"></div>
       </nav>
@@ -216,34 +216,42 @@
           <div id="modelRefGraph"></div>
         </div>
         <div class="panel">
-          <p>模型搭完后，教师可用口令对照「端得稳 / 很难拿稳」的融媒体影像。意象是<strong>清理是否受阻、风险是否升高</strong>，不是「改一个碱基就手抖」。视频位置在「成果展示」，第一版先留空位，由教师解锁后显示。</p>
+          <p>模型搭完后，请进入「开放设计」：根据这条通路想一想，可以从哪一环干预，怎样更好地治疗。意象是<strong>清理是否受阻、风险是否升高</strong>，不是「改一个碱基就手抖」。</p>
         </div>
       </section>
 
-      <!-- 开放设计：不写第二套题 -->
+      <!-- 开放设计：治疗思路 -->
       <section class="view" id="view-design" data-stage="design">
-        <p class="page-title">开放设计 <span class="sep">｜</span> 请在课件与任务卡上完成</p>
-        <div class="panel">
-          <p>开放探究书写、验证方案和三层面治疗思路都在课件与任务卡上。本站不做第二套题，也不再放书写框。</p>
-          <p class="hint">科学探究的关键不在于「对」，而是让解释经得起推敲。证据可以支持模型，也可以反驳模型。</p>
-        </div>
-      </section>
+        <p class="page-title">开放设计 <span class="sep">｜</span> 可以怎样更好地治疗？</p>
+        <p class="lead">先根据刚才的模型想方案。药可以作用在基因表达的不同环节。这里是<strong>研究思路</strong>，不是已经能治好帕金森的上市药。TMEM175 是风险因子。<span class="badge-teach">教学示意 · 研究中</span></p>
 
-      <!-- 成果展示 -->
-      <section class="view" id="view-show" data-stage="show">
-        <p class="page-title">成果展示 <span class="sep">｜</span> 融媒体对照留空</p>
-        <p class="lead">「端得稳 / 很难拿稳」用于对照清理是否受阻、风险是否升高。第一版只留插件位置，不自制片源。请教师解锁后使用。</p>
-        <div class="media-slots" id="mediaSlots">
-          <div class="media-ph is-locked" data-media="steady">
-            <h3>端得稳</h3>
-            <p>视频插件留空。解锁后可在此接入对照影像。</p>
-          </div>
-          <div class="media-ph is-locked" data-media="tremor">
-            <h3>很难拿稳</h3>
-            <p>视频插件留空。解锁后可在此接入对照影像。</p>
+        <div class="panel">
+          <h3>第一步：你的方案主要作用在哪一环？</h3>
+          <p class="hint">先选一环，再说出你的想法。可以多试几种，不必一次想完。</p>
+          <div class="design-grid" id="designLinks"></div>
+        </div>
+
+        <div class="panel" id="designIdeaPanel">
+          <h3>第二步：用一句话写出你的想法</h3>
+          <p class="hint" id="designPrompt">先点上面的一环，再在这里写下你想怎么干预。</p>
+          <textarea id="designIdea" maxlength="240" placeholder="例如：导入正常的 TMEM175 mRNA，让细胞翻译出功能正常的通道蛋白……" rows="3"></textarea>
+          <div class="btn-row">
+            <button class="btn btn-primary" type="button" id="designAsk">请追问一下</button>
+            <button class="btn" type="button" id="designReset">换一环重来</button>
           </div>
         </div>
-        <p class="hint">小组答辩的四项产物（流程图、诊断结论、致病机理模型、治疗建议）请按课件「30 秒答辩」在课堂展示，不必抄到本站。</p>
+
+        <div class="panel design-feedback" id="designFeedback" hidden></div>
+
+        <div class="panel clue-panel">
+          <h3>课堂线索（标明研究中，不是上市药）</h3>
+          <ul class="clue-list">
+            <li><strong>生物合成药</strong>：用细胞或患者自己的核糖体把蛋白造出来，比如重组表达、导入 mRNA 再翻译。这和今天复习的「转录—翻译」是同一条原理。针对 TMEM175、用于帕金森病的这类药目前还没有上市。</li>
+            <li><strong>核酸药物</strong>：针对 α-突触核蛋白的 mRNA，减少它的翻译。有的已进入早期临床研究，但这不是「TMEM175 的药已经进入临床」。</li>
+            <li><strong>小分子激动剂</strong>：让功能减弱的 TMEM175 通道更容易打开，目前还在临床前。不要和另一种靶点（TRPML1）的溶酶体通道药混写成同一种药。</li>
+          </ul>
+          <p class="hint" style="margin-bottom:0">完整方案的书写、可行性和安全性评估，也可以继续在课件与任务卡上完成。</p>
+        </div>
       </section>
     </main>
   </div>
@@ -278,7 +286,6 @@
         <div class="btn-row">
           <button class="btn" type="button" data-flag="lysosomeAbnormal">溶酶体异常对照</button>
           <button class="btn" type="button" data-flag="modelRef">参考模型</button>
-          <button class="btn" type="button" data-flag="media">融媒体空位</button>
           <button class="btn" type="button" data-flag="compare">诊断标准示意</button>
         </div>
         <div class="btn-row">
@@ -300,6 +307,7 @@
   <script src="js/lysosome.js"></script>
   <script src="js/model.js"></script>
   <script src="js/tutor.js"></script>
+  <script src="js/design.js"></script>
   <script>
     /* 可选的本地 config.js：存在则覆盖示例配置。缺失时忽略，保证无 key 也能上课。
        boot 必须在各模块的 DOMContentLoaded 监听注册之后、并等 DOMContentLoaded 再跑，

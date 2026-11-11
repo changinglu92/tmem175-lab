@@ -1,6 +1,6 @@
 /* 帕金森诊疗中心 · 应用壳：导航、教师解锁、拖拽、轻提示 */
 (function (global) {
-  const STORAGE = "tmem175-lab-v1";
+  const STORAGE = "tmem175-lab-v2";
   const PASS = "tmem175";
 
   const STAGES = [
@@ -8,11 +8,10 @@
     { id: "inspire", nav: "启发思路", routes: ["inspire"] },
     { id: "diagnose", nav: "诊断归因", routes: ["diagnose"] },
     { id: "model", nav: "模型建构", routes: ["journey", "lysosome", "model"] },
-    { id: "design", nav: "开放设计", routes: ["design"] },
-    { id: "show", nav: "成果展示", routes: ["show"] }
+    { id: "design", nav: "开放设计", routes: ["design"] }
   ];
 
-  const DEFAULT_STATE = {
+  const CLASSROOM_STATE = {
     currentStage: "diagnose",
     afterClass: false,
     flags: {
@@ -20,6 +19,18 @@
       modelRef: false,
       media: false,
       compare: false
+    }
+  };
+
+  /* 预览默认全部解锁，方便通看；课上用教师面板「恢复课上默认」改回按阶段锁定。 */
+  const DEFAULT_STATE = {
+    currentStage: "design",
+    afterClass: true,
+    flags: {
+      lysosomeAbnormal: true,
+      modelRef: true,
+      media: false,
+      compare: true
     }
   };
 
@@ -36,7 +47,7 @@
       if (!raw) return structuredClone(DEFAULT_STATE);
       const s = JSON.parse(raw);
       return {
-        currentStage: s.currentStage || "diagnose",
+        currentStage: s.currentStage || "design",
         afterClass: !!s.afterClass,
         flags: Object.assign({}, DEFAULT_STATE.flags, s.flags || {})
       };
@@ -81,7 +92,7 @@
 
   App.unlockAll = function () {
     App.state.afterClass = true;
-    App.state.currentStage = "show";
+    App.state.currentStage = "design";
     App.state.flags.lysosomeAbnormal = true;
     App.state.flags.modelRef = true;
     App.state.flags.media = true;
@@ -93,7 +104,7 @@
   };
 
   App.resetDefault = function () {
-    App.state = structuredClone(DEFAULT_STATE);
+    App.state = structuredClone(CLASSROOM_STATE);
     saveState();
     renderNav();
     go("home");
@@ -102,7 +113,9 @@
 
   function parseHash() {
     const h = (location.hash || "#/home").replace(/^#\/?/, "");
-    return h.split("?")[0] || "home";
+    let route = h.split("?")[0] || "home";
+    if (route === "show") route = "design";
+    return route;
   }
 
   function go(route) {
@@ -169,7 +182,7 @@
       { stage: "model", route: "journey", kicker: "模型建构", title: "宏观 → 微观全景", text: "从端茶杯的手飞向神经系统、神经元、溶酶体，再进入图 8。" },
       { stage: "model", route: "lysosome", kicker: "模型建构", title: "图 8 溶酶体 3D", text: "先看正常，再问、再猜、再拖因果卡；最后才切换异常对照。" },
       { stage: "model", route: "model", kicker: "模型建构", title: "拖卡建构模型", text: "与课件同一套卡片，可以拖错，可以拆开重来。" },
-      { stage: "show", route: "show", kicker: "成果展示", title: "端得稳 / 很难拿稳", text: "融媒体对照留空位，由教师解锁后使用。" }
+      { stage: "design", route: "design", kicker: "开放设计", title: "治疗思路", text: "根据模型想一想：可以从哪一环干预，怎样更好地治疗。" }
     ];
     box.innerHTML = cards.map((c) => {
       const locked = !App.isUnlocked(c.stage);
@@ -285,7 +298,7 @@
       App._teacherAuthed = true;
       App.resetDefault();
       fillTeacherBody();
-      toast("已恢复课上默认：讲到诊断归因");
+      toast("已恢复课上默认：讲到诊断归因，后续阶段重新锁定");
     });
   }
 

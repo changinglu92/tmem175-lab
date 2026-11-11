@@ -35,9 +35,10 @@ body {
   font-family: var(--font);
   color: var(--ink);
   background: var(--bg);
-  font-size: 17px;
-  line-height: 1.55;
+  font-size: 16px;
+  line-height: 1.7;
   overflow: hidden;
+  letter-spacing: 0.01em;
 }
 button, input, textarea { font-family: inherit; font-size: inherit; }
 button { cursor: pointer; }
@@ -50,7 +51,7 @@ a { color: var(--green); }
 .site-header { flex: 0 0 auto; background: var(--paper); box-shadow: 0 1px 0 var(--line); z-index: 20; }
 .brand-row {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 8px 18px 6px; gap: 12px;
+  padding: 12px 28px 10px; gap: 16px;
 }
 .brand {
   display: flex; flex-direction: column; gap: 0;
@@ -110,28 +111,33 @@ a { color: var(--green); }
 /* ===== 主区 ===== */
 .main {
   flex: 1; min-height: 0; overflow: auto;
-  padding: 16px 18px 88px;
+  padding: 28px 32px 120px;
+  max-width: 1180px;
+  width: 100%;
+  margin: 0 auto;
 }
 .view { display: none; animation: fadein 0.25s ease; }
 .view.is-on { display: block; }
 @keyframes fadein { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 
 .page-title {
-  margin: 0 0 4px; font-size: 24px; font-weight: 800; color: var(--ink);
+  margin: 0 0 10px; font-size: 26px; font-weight: 800; color: var(--ink);
+  letter-spacing: 0.01em;
 }
 .page-title em, .page-title span.sep { font-style: normal; font-weight: 600; color: var(--green); }
 .lead, .hint {
-  color: var(--muted); margin: 0 0 14px; font-size: 15px;
+  color: var(--muted); margin: 0 0 20px; font-size: 15px;
+  max-width: 46em; line-height: 1.75;
 }
 .hint strong { color: var(--ink); font-weight: 700; }
 
 .panel {
   background: var(--paper);
   border: 1px solid var(--line);
-  border-radius: var(--radius);
+  border-radius: 18px;
   box-shadow: var(--shadow);
-  padding: 16px 18px;
-  margin-bottom: 14px;
+  padding: 22px 24px;
+  margin-bottom: 22px;
 }
 .panel h3 { margin: 0 0 10px; font-size: 18px; }
 .row { display: flex; gap: 14px; flex-wrap: wrap; }
@@ -167,8 +173,8 @@ a { color: var(--green); }
 
 /* ===== 首页模块卡 ===== */
 .module-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 12px; margin-top: 8px;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px; margin-top: 12px;
 }
 .module-card {
   text-align: left; border: 1px solid var(--line); background: var(--paper);
@@ -181,8 +187,8 @@ a { color: var(--green); }
 .module-card .kicker { font-size: 12px; font-weight: 800; color: var(--green); letter-spacing: 0.06em; }
 
 /* ===== 诊断配对 ===== */
-.seq-board { display: grid; gap: 12px; }
-.seq-card { border-radius: 14px; border: 1px solid var(--line); padding: 12px 14px; background: #fbfdfb; }
+.seq-board { display: grid; gap: 18px; }
+.seq-card { border-radius: 16px; border: 1px solid var(--line); padding: 18px 20px; background: #fbfdfb; }
 .seq-card.normal { border-left: 6px solid var(--green); }
 .seq-card.patient-a { border-left: 6px solid var(--amber); }
 .seq-card.patient-b { border-left: 6px solid var(--info); }
@@ -270,9 +276,9 @@ a { color: var(--green); }
 .step-dots button.is-on { background: var(--gold); transform: scale(1.25); }
 
 /* ===== 溶酶体 3D ===== */
-.lyso-layout { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.9fr); gap: 14px; }
+.lyso-layout { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(300px, 0.85fr); gap: 22px; align-items: start; }
 .lyso-stage {
-  position: relative; background: #0e1a22; border-radius: 16px; overflow: hidden; min-height: 460px; height: min(64vh, 640px);
+  position: relative; background: #0e1a22; border-radius: 16px; overflow: hidden; min-height: 500px; height: min(68vh, 700px);
   box-shadow: var(--shadow);
 }
 .lyso-stage canvas { position:absolute; inset:0; z-index:0; width: 100% !important; height: 100% !important; display: block; touch-action: none; }
@@ -310,7 +316,7 @@ a { color: var(--green); }
 .chain-slot.is-filled { border-style: solid; border-color: var(--green); background: var(--green-soft); }
 
 /* ===== 模型拖卡 ===== */
-.model-workspace { display: grid; gap: 12px; }
+.model-workspace { display: grid; gap: 18px; }
 .path-row {
   display: grid; grid-template-columns: 88px 1fr; gap: 8px; align-items: start;
 }
@@ -432,7 +438,7 @@ a { color: var(--green); }
 }
 @media (max-width: 640px) {
   .nav-item { font-size: 12px; }
-  .main { padding: 12px 10px 96px; }
+  .main { padding: 16px 14px 110px; }
 }
 
 .subnav {
@@ -445,5 +451,52 @@ a { color: var(--green); }
   outline-offset: 2px;
 }
 
-.main { padding-right: 24px; }
+/* spacing handled above */
 #modelRefGraph .slots { padding-right: 56px; }
+
+
+/* ===== 开放设计：治疗思路 ===== */
+.design-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-top: 8px;
+}
+.design-card {
+  text-align: left;
+  border: 2px solid var(--line);
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px 14px;
+  min-height: 96px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.03);
+}
+.design-card strong { font-size: 16px; color: var(--ink); }
+.design-card span { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.design-card.is-on {
+  border-color: var(--green);
+  background: var(--green-soft);
+  box-shadow: 0 0 0 3px rgba(47, 111, 94, 0.12);
+}
+#designIdea {
+  width: 100%;
+  min-height: 92px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+  line-height: 1.6;
+  resize: vertical;
+}
+.design-feedback {
+  border-left: 5px solid var(--gold);
+  background: #FFFDF3;
+}
+.design-feedback p { margin: 0 0 10px; }
+.design-feedback p:last-child { margin-bottom: 0; }
+.clue-list { margin: 0; padding-left: 1.2em; }
+.clue-list li { margin: 10px 0; }
+.lyso-layout .panel { margin-bottom: 16px; }
+.lyso-layout .panel:last-child { margin-bottom: 0; }
