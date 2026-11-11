@@ -1,4 +1,4 @@
-/* 宏观→微观：老人端茶杯的手 → 神经系统 → 神经元 → 溶酶体 → 图8 */
+/* 宏观→微观：老人端茶杯的手 → 神经系统 → 神经元 → 溶酶体立体对照 */
 (function () {
   const STEPS = [
     {
@@ -26,7 +26,7 @@
     {
       id: "lyso",
       title: "溶酶体：消化车间",
-      text: "溶酶体是细胞内的消化车间，需要稳定的酸性环境才能让水解酶工作。下一站进入图 8 立体对照。",
+      text: "溶酶体是细胞内的消化车间，需要稳定的酸性环境才能让水解酶工作。下一站进入溶酶体立体对照。",
       kind: "svg",
       svg: lysoSvg()
     }
@@ -127,7 +127,7 @@
       b.addEventListener("click", () => { step = +b.getAttribute("data-i"); render(); });
     });
     const next = document.getElementById("journeyNext");
-    next.textContent = step === STEPS.length - 1 ? "进入图 8 立体对照" : "下一步";
+    next.textContent = step === STEPS.length - 1 ? "进入溶酶体立体对照" : "下一步";
     document.getElementById("journeyPrev").disabled = step === 0;
   }
 

@@ -185,8 +185,8 @@
     const cards = [
       { stage: "inspire", route: "inspire", kicker: "启发思路", title: "请先看课件", text: "转录要点、对照表与流程图在幻灯片上，站内不重复出题。" },
       { stage: "diagnose", route: "diagnose", kicker: "诊断归因", title: "诊断配对", text: "第 38–42 位密码子教学示意：自己配对、改一个碱基，再对照标准示意。" },
-      { stage: "model", route: "journey", kicker: "模型建构", title: "宏观 → 微观全景", text: "从端茶杯的手飞向神经系统、神经元、溶酶体，再进入图 8。" },
-      { stage: "model", route: "lysosome", kicker: "模型建构", title: "图 8 溶酶体 3D", text: "先看正常，再问、再猜、再拖因果卡；最后才切换异常对照。" },
+      { stage: "model", route: "journey", kicker: "模型建构", title: "宏观 → 微观全景", text: "从端茶杯的手飞向神经系统、神经元，再进入溶酶体立体对照。" },
+      { stage: "model", route: "lysosome", kicker: "模型建构", title: "溶酶体 3D", text: "先看正常，再问、再猜、再拖因果卡；最后才切换异常对照。" },
       { stage: "model", route: "model", kicker: "模型建构", title: "拖卡建构模型", text: "与课件同一套卡片，可以拖错，可以拆开重来。" },
       { stage: "design", route: "design", kicker: "开放设计", title: "治疗思路", text: "根据模型想一想：可以从哪一环干预，怎样更好地治疗。" }
     ];
@@ -399,7 +399,7 @@
     bar.className = "subnav";
     const items = [
       ["journey", "① 宏观 → 微观"],
-      ["lysosome", "② 图 8 溶酶体"],
+      ["lysosome", "② 溶酶体立体对照"],
       ["model", "③ 拖卡建模"]
     ];
     bar.innerHTML = items.map(([r, t]) =>

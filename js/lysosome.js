@@ -1,4 +1,4 @@
-/* 图 8 溶酶体 3D：V-ATPase 氢泵 vs TMEM175 通道。默认只展示正常状态。 */
+/* 溶酶体 3D：V-ATPase 氢泵 vs TMEM175 通道。默认只展示正常状态。 */
 (function () {
   const CAUSE = [
     "TMEM175 通道减弱",
